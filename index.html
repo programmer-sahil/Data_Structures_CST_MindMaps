@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Structures Mind Maps</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .unit-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            cursor: pointer;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+        }
+
+        .mindmap-container {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .mindmap-container.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .mindmap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .central-node {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            position: relative;
+        }
+
+        .branches {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .branch {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(240, 147, 251, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .branch:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(240, 147, 251, 0.5);
+        }
+
+        .branch h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid rgba(255,255,255,0.5);
+            padding-bottom: 8px;
+        }
+
+        .branch ul {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .branch li {
+            padding: 5px 0;
+            font-size: 14px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .branch li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+        }
+
+        .sub-branch {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            margin-top: 10px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+
+        .complexity-box {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .complexity-box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .exam-definitions {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .exam-definitions h2 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 22px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .def-item {
+            background: white;
+            padding: 12px 18px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .def-item strong {
+            color: #667eea;
+            font-size: 16px;
+        }
+
+        .def-item span {
+            color: #4a5568;
+            display: block;
+            margin-top: 5px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .branches {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .branch {
+                width: 100%;
+                max-width: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="text-align: center; color: white; font-size: 14px; margin-bottom: 10px; font-weight: 500;">
+            Created by SK SAHIL (Freelance Software Developer, Coding Tutor)
+        </div>
+        <h1> Data Structures Mind Maps (3rd Sem CST Students)</h1>
+        
+        <div class="unit-tabs">
+            <button class="tab-btn active" onclick="showUnit(1)">Unit 1: Introduction</button>
+            <button class="tab-btn" onclick="showUnit(2)">Unit 2: Linear DS</button>
+            <button class="tab-btn" onclick="showUnit(3)">Unit 3: Linked Lists</button>
+            <button class="tab-btn" onclick="showUnit(4)">Unit 4: Non-Linear DS</button>
+        </div>
+
+        <!-- Unit 1 -->
+        <div id="unit1" class="mindmap-container active">
+            <div class="mindmap">
+                <div class="central-node">UNIT 1: Introduction to Data Structures</div>
+                
+                <div class="branches">
+                    <div class="branch">
+                        <h3>Basic Terminology</h3>
+                        <ul>
+                            <li>Data Structure</li>
+                            <li>Data Type</li>
+                            <li>Data Object</li>
+                            <li>Data Item</li>
+                        </ul>
+                    </div>
+
+                    <div class="branch">
+                        <h3>Classification</h3>
+                        <div class="sub-branch">
+                            <strong>Primitive:</strong>
+                            <ul>
+                                <li>int, float, char</li>
+                                <li>pointer</li>
+                            </ul>
+                        </div>
+                        <div class="sub-branch">
+                            <strong>Non-Primitive:</strong>
+                            <ul>
+                                <li>Linear: Array, Stack, Queue, Linked List</li>
+                                <li>Non-Linear: Tree, Graph</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="branch">
+                        <h3>Operations</h3>
+                        <ul>
+                            <li>Traversing</li>
+                            <li>Searching</li>
+                            <li>Insertion</li>
+                            <li>Deletion</li>
+                            <li>Sorting</li>
+                            <li>Merging</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exam-definitions">
+                <h2>Key Definitions for Exams - Unit 1</h2>
+                <div class="def-item">
+                    <strong>Data Structure:</strong>
+                    <span>A way of organizing and storing data in a computer so that it can be accessed and modified efficiently.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Abstract Data Type (ADT):</strong>
+                    <span>A mathematical model that defines data type by its behavior (operations) from the user's point of view, independent of implementation.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Linear Data Structure:</strong>
+                    <span>Data elements arranged in sequential manner where each element is connected to its previous and next element (e.g., Array, Stack, Queue, Linked List).</span>
+                </div>
+                <div class="def-item">
+                    <strong>Non-Linear Data Structure:</strong>
+                    <span>Data elements not arranged sequentially; one element can connect to multiple elements forming hierarchical relationships (e.g., Trees, Graphs).</span>
+                </div>
+                <div class="def-item">
+                    <strong>Time Complexity:</strong>
+                    <span>Amount of time taken by an algorithm to run as a function of input size, typically expressed using Big O notation.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Space Complexity:</strong>
+                    <span>Amount of memory space required by an algorithm during execution, including input data and auxiliary space.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Unit 2 -->
+        <div id="unit2" class="mindmap-container">
+            <div class="mindmap">
+                <div class="central-node">UNIT 2: Linear Data Structures</div>
+                
+                <div class="branches">
+                    <div class="branch">
+                        <h3>STACKS (LIFO)</h3>
+                        <ul>
+                            <li>Array Implementation</li>
+                            <li>Push Operation</li>
+                            <li>Pop Operation</li>
+                            <li>Peek/Top</li>
+                        </ul>
+                        <div class="sub-branch">
+                            <strong>Applications:</strong>
+                            <ul>
+                                <li>Infix to Postfix</li>
+                                <li>Evaluate Postfix</li>
+                                <li>Function Calls</li>
+                                <li>Undo Operations</li>
+                            </ul>
+                        </div>
+                        <div class="complexity-box">
+                            <strong>Time Complexity:</strong>
+                            Push: O(1) | Pop: O(1)
+                        </div>
+                    </div>
+
+                    <div class="branch">
+                        <h3>QUEUES (FIFO)</h3>
+                        <ul>
+                            <li>Array Implementation</li>
+                            <li>Enqueue Operation</li>
+                            <li>Dequeue Operation</li>
+                        </ul>
+                        <div class="sub-branch">
+                            <strong>Types:</strong>
+                            <ul>
+                                <li>Simple Queue</li>
+                                <li>Circular Queue</li>
+                                <li>Double-Ended Queue (Deque)</li>
+                                <li>Priority Queue</li>
+                            </ul>
+                        </div>
+                        <div class="sub-branch">
+                            <strong>Applications:</strong>
+                            <ul>
+                                <li>Round Robin Algorithm</li>
+                                <li>CPU Scheduling</li>
+                                <li>Print Queue</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="branch">
+                        <h3>RECURSION</h3>
+                        <ul>
+                            <li>Base Case</li>
+                            <li>Recursive Case</li>
+                            <li>Memory Stack</li>
+                        </ul>
+                        <div class="sub-branch">
+                            <strong>Examples:</strong>
+                            <ul>
+                                <li>GCD (Euclidean)</li>
+                                <li>Tower of Hanoi</li>
+                                <li>Fibonacci Series</li>
+                                <li>Factorial</li>
+                            </ul>
+                        </div>
+                        <div class="sub-branch">
+                            <strong>Recursion vs Iteration</strong>
+                            <ul>
+                                <li>More memory (stack)</li>
+                                <li>Cleaner code</li>
+                                <li>Slower execution</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exam-definitions">
+                <h2>Key Definitions for Exams - Unit 2</h2>
+                <div class="def-item">
+                    <strong>Stack:</strong>
+                    <span>A linear data structure following LIFO (Last In First Out) principle where insertion and deletion occur at the same end called TOP.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Stack Overflow:</strong>
+                    <span>Condition when attempting to push an element onto a full stack (in array implementation).</span>
+                </div>
+                <div class="def-item">
+                    <strong>Stack Underflow:</strong>
+                    <span>Condition when attempting to pop an element from an empty stack.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Queue:</strong>
+                    <span>A linear data structure following FIFO (First In First Out) principle where insertion occurs at REAR and deletion at FRONT.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Circular Queue:</strong>
+                    <span>A queue where the last position is connected back to the first position, making efficient use of array space and eliminating false overflow.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Deque (Double-Ended Queue):</strong>
+                    <span>A queue where insertion and deletion can occur at both front and rear ends.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Recursion:</strong>
+                    <span>A function that calls itself directly or indirectly, consisting of a base case (termination condition) and recursive case.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Infix Expression:</strong>
+                    <span>An expression where operator is placed between operands (e.g., A + B).</span>
+                </div>
+                <div class="def-item">
+                    <strong>Postfix Expression:</strong>
+                    <span>An expression where operator follows the operands (e.g., AB+), eliminates need for parentheses and operator precedence rules.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Unit 3 -->
+        <div id="unit3" class="mindmap-container">
+            <div class="mindmap">
+                <div class="central-node">UNIT 3: Linked Lists</div>
+                
+                <div class="branches">
+                    <div class="branch">
+                        <h3>Singly Linked List</h3>
+                        <div class="sub-branch">
+                            <strong>Structure:</strong>
+                            <ul>
+                                <li>Data field</li>
+                                <li>Next pointer</li>
+                            </ul>
+                        </div>
+                        <div class="sub-branch">
+                            <strong>Operations:</strong>
+                            <ul>
+                                <li>Insert (Beginning/Middle/End)</li>
+                                <li>Delete (First/Middle/Last)</li>
+                                <li>Traverse</li>
+                                <li>Search</li>
+                            </ul>
+                        </div>
+                        <div class="complexity-box">
+                            <strong>Complexity:</strong>
+                            Insert at begin: O(1)<br>
+                            Search: O(n)
+                        </div>
+                    </div>
+
+                    <div class="branch">
+                        <h3>Doubly Linked List</h3>
+                        <div class="sub-branch">
+                            <strong>Structure:</strong>
+                            <ul>
+                                <li>Data field</li>
+                                <li>Next pointer</li>
+                                <li>Previous pointer</li>
+                            </ul>
+                        </div>
+                        <div class="sub-branch">
+                            <strong>Advantages:</strong>
+                            <ul>
+                                <li>Bidirectional traversal</li>
+                                <li>Easier deletion</li>
+                                <li>Insert before node</li>
+                            </ul>
+                        </div>
+                        <div class="sub-branch">
+                            <strong>Operations:</strong>
+                            <ul>
+                                <li>Insert (3 positions)</li>
+                                <li>Delete (3 positions)</li>
+                                <li>Forward/Backward traverse</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="branch">
+                        <h3>Circular Linked Lists</h3>
+                        <div class="sub-branch">
+                            <strong>Singly Circular:</strong>
+                            <ul>
+                                <li>Last node → First node</li>
+                                <li>No NULL pointer</li>
+                                <li>Continuous traversal</li>
+                            </ul>
+                        </div>
+                        <div class="sub-branch">
+                            <strong>Doubly Circular:</strong>
+                            <ul>
+                                <li>Both directions circular</li>
+                                <li>Last ↔ First connected</li>
+                            </ul>
+                        </div>
+                        <div class="sub-branch">
+                            <strong>Applications:</strong>
+                            <ul>
+                                <li>Round Robin Scheduling</li>
+                                <li>Music Playlist</li>
+                                <li>Browser History</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="branch">
+                        <h3>LL Representations</h3>
+                        <div class="sub-branch">
+                            <strong>Stack using LL:</strong>
+                            <ul>
+                                <li>Push at head: O(1)</li>
+                                <li>Pop from head: O(1)</li>
+                                <li>Dynamic size</li>
+                            </ul>
+                        </div>
+                        <div class="sub-branch">
+                            <strong>Queue using LL:</strong>
+                            <ul>
+                                <li>Enqueue at tail</li>
+                                <li>Dequeue from head</li>
+                                <li>No overflow</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exam-definitions">
+                <h2>Key Definitions for Exams - Unit 3</h2>
+                <div class="def-item">
+                    <strong>Linked List:</strong>
+                    <span>A linear data structure where elements (nodes) are stored in non-contiguous memory locations, connected using pointers.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Node:</strong>
+                    <span>Basic unit of a linked list containing two parts: DATA field (stores information) and LINK/NEXT field (stores address of next node).</span>
+                </div>
+                <div class="def-item">
+                    <strong>Singly Linked List:</strong>
+                    <span>A linked list where each node contains data and a pointer to the next node, traversal possible in only one direction (forward).</span>
+                </div>
+                <div class="def-item">
+                    <strong>Doubly Linked List:</strong>
+                    <span>A linked list where each node has three fields: data, pointer to next node, and pointer to previous node; allows bidirectional traversal.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Circular Linked List:</strong>
+                    <span>A linked list where the last node points back to the first node instead of NULL, forming a circular chain.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Header Node:</strong>
+                    <span>A dummy node at the beginning of a linked list that doesn't store actual data but simplifies operations by eliminating special cases.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Dynamic Memory Allocation:</strong>
+                    <span>Memory allocated at runtime using functions like malloc(), calloc() in C, allowing flexible memory usage based on requirements.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Self-Referential Structure:</strong>
+                    <span>A structure that contains a pointer to a structure of the same type, used to implement linked lists and trees.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Unit 4 -->
+        <div id="unit4" class="mindmap-container">
+            <div class="mindmap">
+                <div class="central-node">UNIT 4: Non-Linear Data Structures</div>
+                
+                <div class="branches">
+                    <div class="branch">
+                        <h3>TREES - Basic Concepts</h3>
+                        <div class="sub-branch">
+                            <strong>Terminology:</strong>
+                            <ul>
+                                <li>Root, Parent, Child</li>
+                                <li>Leaf, Sibling</li>
+                                <li>Height, Depth, Level</li>
+                                <li>Degree of node</li>
+                            </ul>
+                        </div>
+                        <div class="sub-branch">
+                            <strong>Representations:</strong>
+                            <ul>
+                                <li>Array representation</li>
+                                <li>Linked representation</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="branch">
+                        <h3>BINARY TREES</h3>
+                        <div class="sub-branch">
+                            <strong>Types:</strong>
+                            <ul>
+                                <li>Full Binary Tree</li>
+                                <li>Complete Binary Tree</li>
+                                <li>Perfect Binary Tree</li>
+                                <li>Balanced Binary Tree</li>
+                            </ul>
+                        </div>
+                        <div class="sub-branch">
+                            <strong>Operations:</strong>
+                            <ul>
+                                <li>Insertion</li>
+                                <li>Deletion</li>
+                                <li>Search</li>
+                            </ul>
+                        </div>
+                        <div class="sub-branch">
+                            <strong>Traversals:</strong>
+                            <ul>
+                                <li>Inorder (L-Root-R)</li>
+                                <li>Preorder (Root-L-R)</li>
+                                <li>Postorder (L-R-Root)</li>
+                                <li>Level Order (BFS)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="branch">
+                        <h3>Special Trees</h3>
+                        <div class="sub-branch">
+                            <strong>B-Tree:</strong>
+                            <ul>
+                                <li>Self-balancing</li>
+                                <li>Multiple keys per node</li>
+                                <li>Used in databases</li>
+                                <li>Optimized for disk access</li>
+                            </ul>
+                        </div>
+                        <div class="sub-branch">
+                            <strong>AVL Tree:</strong>
+                            <ul>
+                                <li>Height-balanced BST</li>
+                                <li>Balance Factor: |HL - HR| ≤ 1</li>
+                                <li>Rotations: LL, RR, LR, RL</li>
+                                <li>Search: O(log n)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="branch">
+                        <h3>GRAPHS</h3>
+                        <div class="sub-branch">
+                            <strong>Terminology:</strong>
+                            <ul>
+                                <li>Vertex, Edge</li>
+                                <li>Directed/Undirected</li>
+                                <li>Weighted/Unweighted</li>
+                                <li>Degree, Path, Cycle</li>
+                            </ul>
+                        </div>
+                        <div class="sub-branch">
+                            <strong>Representations:</strong>
+                            <ul>
+                                <li>Adjacency Matrix</li>
+                                <li>Adjacency List</li>
+                                <li>Edge List</li>
+                            </ul>
+                        </div>
+                        <div class="sub-branch">
+                            <strong>Traversals:</strong>
+                            <ul>
+                                <li>BFS (Breadth First Search)</li>
+                                <li>DFS (Depth First Search)</li>
+                            </ul>
+                        </div>
+                        <div class="complexity-box">
+                            <strong>Complexity:</strong>
+                            BFS/DFS: O(V + E)<br>
+                            Matrix space: O(V²)<br>
+                            List space: O(V + E)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exam-definitions">
+                <h2>Key Definitions for Exams - Unit 4</h2>
+                <div class="def-item">
+                    <strong>Tree:</strong>
+                    <span>A non-linear hierarchical data structure consisting of nodes connected by edges, with one node designated as root and no cycles.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Binary Tree:</strong>
+                    <span>A tree where each node has at most two children, referred to as left child and right child.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Binary Search Tree (BST):</strong>
+                    <span>A binary tree where for each node: all values in left subtree are less than node's value, and all values in right subtree are greater.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Tree Traversal:</strong>
+                    <span>Process of visiting all nodes in a tree in a specific order. Types: Inorder (Left-Root-Right), Preorder (Root-Left-Right), Postorder (Left-Right-Root).</span>
+                </div>
+                <div class="def-item">
+                    <strong>Height of Tree:</strong>
+                    <span>Number of edges in the longest path from root to a leaf node. Height of empty tree is -1, single node is 0.</span>
+                </div>
+                <div class="def-item">
+                    <strong>AVL Tree:</strong>
+                    <span>A self-balancing BST where the difference of heights of left and right subtrees (balance factor) cannot be more than 1 for all nodes.</span>
+                </div>
+                <div class="def-item">
+                    <strong>B-Tree:</strong>
+                    <span>A self-balancing search tree where nodes can have multiple keys and more than two children, optimized for systems that read/write large blocks of data.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Graph:</strong>
+                    <span>A non-linear data structure consisting of vertices (nodes) and edges (connections between nodes). Can be directed or undirected, weighted or unweighted.</span>
+                </div>
+                <div class="def-item">
+                    <strong>Adjacency Matrix:</strong>
+                    <span>A 2D array of size V×V (V=number of vertices) where matrix[i][j]=1 if edge exists from vertex i to j, else 0. Space: O(V²).</span>
+                </div>
+                <div class="def-item">
+                    <strong>Adjacency List:</strong>
+                    <span>An array of linked lists where index represents a vertex and the list contains all adjacent vertices. Space: O(V+E).</span>
+                </div>
+                <div class="def-item">
+                    <strong>BFS (Breadth First Search):</strong>
+                    <span>Graph traversal algorithm that explores all neighbors at present depth before moving to nodes at next depth level. Uses Queue. Time: O(V+E).</span>
+                </div>
+                <div class="def-item">
+                    <strong>DFS (Depth First Search):</strong>
+                    <span>Graph traversal algorithm that explores as far as possible along each branch before backtracking. Uses Stack/Recursion. Time: O(V+E).</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showUnit(unitNum) {
+            // Hide all mindmaps
+            const mindmaps = document.querySelectorAll('.mindmap-container');
+            mindmaps.forEach(m => m.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected mindmap
+            document.getElementById('unit' + unitNum).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
